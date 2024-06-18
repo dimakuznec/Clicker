@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
 import Home from './components/Home/Home'
@@ -11,6 +11,8 @@ const App: React.FC = () => {
 	const [clickIncrement, setClickIncrement] = useState<number>(1)
 	const [upgradeLevel, setUpgradeLevel] = useState<number>(1)
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
+	const [autoFarmLevel, setAutoFarmLevel] = useState<number>(1)
+	const [autoFarmInterval, setAutoFarmInterval] = useState<number>(5000)
 
 	const handleClick = () => {
 		setCurrency(prevCurrency => prevCurrency + clickIncrement)
@@ -30,6 +32,22 @@ const App: React.FC = () => {
 			setUpgradeLevel(prevLevel => prevLevel + 1)
 		}
 	}
+
+	const handleAutoFarmUpgrade = (cost: number, increment: number) => {
+		if (currency >= cost) {
+			setCurrency(prevCurrency => prevCurrency - cost)
+			setAutoFarmLevel(prevLevel => prevLevel + 1)
+			setAutoFarmInterval(prevInterval => prevInterval - increment)
+		}
+	}
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCurrency(prevCurrency => prevCurrency + autoFarmLevel)
+		}, autoFarmInterval)
+
+		return () => clearInterval(interval)
+	}, [autoFarmLevel, autoFarmInterval])
 
 	const toggleMenu = () => {
 		setIsMenuOpen(!isMenuOpen)
@@ -80,6 +98,9 @@ const App: React.FC = () => {
 								currency={currency}
 								upgradeLevel={upgradeLevel}
 								onUpgrade={handleUpgrade}
+								autoFarmLevel={autoFarmLevel}
+								autoFarmInterval={autoFarmInterval}
+								onAutoFarmUpgrade={handleAutoFarmUpgrade}
 							/>
 						}
 					/>
