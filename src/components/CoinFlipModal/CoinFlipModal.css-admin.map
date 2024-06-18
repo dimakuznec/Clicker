@@ -1,0 +1,10 @@
+{
+	"version": 3,
+	"sources": [
+		"Coin.scss",
+		"Coin.css"
+	],
+	"names": [],
+	"mappings": "AAAA,+CAAA;AACA;EACC,eAAA;EACA,MAAA;EACA,OAAA;EACA,WAAA;EACA,YAAA;EACA,oCAAA;EACA,aAAA;EACA,uBAAA;EACA,mBAAA;ACCD;;ADEA;EACC,uBAAA;EACA,aAAA;EACA,kBAAA;EACA,kBAAA;ACCD;;ADEA;EACC,aAAA;EACA,6BAAA;EACA,gBAAA;ACCD",
+	"file": "Coin.css"
+}

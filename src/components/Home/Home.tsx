@@ -10,6 +10,7 @@ interface HomeProps {
 	handleClick: () => void
 	upgradeLevel: number
 	tapCount: number
+	coinFlipTimer: number
 }
 
 const Home: React.FC<HomeProps> = ({
@@ -18,6 +19,7 @@ const Home: React.FC<HomeProps> = ({
 	handleClick,
 	upgradeLevel,
 	tapCount,
+	coinFlipTimer,
 }) => {
 	const [showPlus, setShowPlus] = useState(false)
 	const [increment, setIncrement] = useState<number>(tapCount)
@@ -34,8 +36,20 @@ const Home: React.FC<HomeProps> = ({
 		}, 1000) // Анимация длится 1 секунду
 	}
 
+	const formatTime = (seconds: number) => {
+		const h = Math.floor(seconds / 3600)
+		const m = Math.floor((seconds % 3600) / 60)
+		const s = Math.floor(seconds % 60)
+		return `${h.toString().padStart(2, '0')}:${m
+			.toString()
+			.padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+	}
+
 	return (
 		<div className='home-container'>
+			<div className='timer'>
+				Время до следующей игры: {formatTime(coinFlipTimer)}
+			</div>
 			<div className='display'>
 				<div className='counter'>
 					<img className='imgRub' src={imgRub} alt='' />

@@ -68,6 +68,18 @@
   animation: moveUp 1s forwards;
 }
 
+.plus-one.win {
+  color: #4caf50; /* Зелёный цвет для выигрыша */
+}
+
+.plus-one.lose {
+  color: #f44336; /* Красный цвет для проигрыша */
+}
+
+.plus-one.show {
+  opacity: 1;
+}
+
 @keyframes moveUp {
   0% {
     opacity: 1;

@@ -67,6 +67,30 @@
 	animation: moveUp 1s forwards;
 }
 
+// .plus-one {
+// 	position: absolute;
+// 	top: 50%;
+// 	left: 50%;
+// 	transform: translate(-50%, -50%);
+// 	color: #fff;
+// 	font-size: 24px;
+// 	font-weight: bold;
+// 	opacity: 0;
+// 	transition: opacity 0.3s;
+// }
+
+.plus-one.win {
+	color: #4caf50; /* Зелёный цвет для выигрыша */
+}
+
+.plus-one.lose {
+	color: #f44336; /* Красный цвет для проигрыша */
+}
+
+.plus-one.show {
+	opacity: 1;
+}
+
 @keyframes moveUp {
 	0% {
 		opacity: 1;

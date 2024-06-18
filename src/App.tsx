@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.css'
+import CoinFlipModal from './components/CoinFlipModal/CoinFlipModal'
 import Home from './components/Home/Home'
 import Shop from './components/Shop/Shop'
 import Upgrade from './components/Upgrade/Upgrade'
@@ -13,6 +14,8 @@ const App: React.FC = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
 	const [autoFarmLevel, setAutoFarmLevel] = useState<number>(1)
 	const [autoFarmInterval, setAutoFarmInterval] = useState<number>(5000)
+	const [showCoinFlipModal, setShowCoinFlipModal] = useState<boolean>(false)
+	const [coinFlipTimer, setCoinFlipTimer] = useState<number>(3600) // 1 час = 3600 секунд
 
 	const handleClick = () => {
 		setCurrency(prevCurrency => prevCurrency + clickIncrement)
@@ -53,6 +56,40 @@ const App: React.FC = () => {
 		setIsMenuOpen(!isMenuOpen)
 	}
 
+	const handleCoinFlip = (choice: string) => {
+		const result = Math.random() < 0.5 ? 'Орёл' : 'Решка'
+		if (choice === result) {
+			setCurrency(prevCurrency => prevCurrency + 5)
+			setUpgradeLevel(prevLevel => prevLevel + 1)
+		} else {
+			setUpgradeLevel(prevLevel => Math.max(1, prevLevel - 1))
+		}
+		setShowCoinFlipModal(false)
+		setCoinFlipTimer(3600) // Сбросить таймер на 1 час
+	}
+
+	useEffect(() => {
+		const timerInterval = setInterval(() => {
+			setCoinFlipTimer(prevTimer => prevTimer - 1)
+		}, 1000)
+
+		const coinFlipInterval = setInterval(() => {
+			setShowCoinFlipModal(true)
+		}, 360000) // 1 час = 3600000 миллисекунд
+
+		return () => {
+			clearInterval(timerInterval)
+			clearInterval(coinFlipInterval)
+		}
+	}, [])
+
+	useEffect(() => {
+		if (coinFlipTimer <= 0) {
+			setShowCoinFlipModal(true)
+			setCoinFlipTimer(3600) // Сбросить таймер на 1 час
+		}
+	}, [coinFlipTimer])
+
 	return (
 		<Router>
 			<div className='App'>
@@ -84,6 +121,7 @@ const App: React.FC = () => {
 								handleClick={handleClick}
 								upgradeLevel={upgradeLevel}
 								tapCount={clickIncrement}
+								coinFlipTimer={coinFlipTimer}
 							/>
 						}
 					/>
@@ -105,6 +143,11 @@ const App: React.FC = () => {
 						}
 					/>
 				</Routes>
+				<CoinFlipModal
+					show={showCoinFlipModal}
+					onClose={() => setShowCoinFlipModal(false)}
+					onPlay={handleCoinFlip}
+				/>
 			</div>
 		</Router>
 	)
