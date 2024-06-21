@@ -1,64 +1,57 @@
-// components/CoinFlipModal/CoinFlipModal.tsx
-import React, { useState } from 'react'
+import React from 'react'
 import './CoinFlipModal.css'
 
 interface CoinFlipModalProps {
 	show: boolean
 	onClose: () => void
 	onPlay: (choice: string) => void
+	result: string | null
 }
 
 const CoinFlipModal: React.FC<CoinFlipModalProps> = ({
 	show,
 	onClose,
 	onPlay,
+	result,
 }) => {
-	const [choice, setChoice] = useState<string | null>(null)
-
-	const handleChoice = (selectedChoice: string) => {
-		setChoice(selectedChoice)
+	const handlePlay = (choice: string) => {
+		onPlay(choice)
 	}
-
-	const handlePlay = () => {
-		if (choice) {
-			onPlay(choice)
-			setChoice(null)
-		}
-	}
-
-	if (!show) return null
 
 	return (
-		<div className='modal-overlay'>
-			<div className='modal-content'>
-				<h2>Игра "Орёл и Решка"</h2>
-				<p>
-					Выберите "Орёл" или "Решка" и получите шанс выиграть монеты и
-					повышение уровня. Если проиграете, уровень прокачки клика будет
-					снижен.
-				</p>
-				<div className='choice-buttons'>
-					<button
-						onClick={() => handleChoice('Орёл')}
-						className={choice === 'Орёл' ? 'selected' : ''}
-					>
-						Орёл
-					</button>
-					<button
-						onClick={() => handleChoice('Решка')}
-						className={choice === 'Решка' ? 'selected' : ''}
-					>
-						Решка
-					</button>
+		<>
+			{show && (
+				<div className='coin-flip-modal'>
+					<div className='modal-content'>
+						<h2>Игра "Орёл и решка"</h2>
+						<p>Выберите сторону монетки:</p>
+						<div className='button-container'>
+							<button
+								className='choice-button'
+								onClick={() => handlePlay('Орёл')}
+							>
+								Орёл
+							</button>
+							<button
+								className='choice-button'
+								onClick={() => handlePlay('Решка')}
+							>
+								Решка
+							</button>
+						</div>
+						{result === 'win' && (
+							<p className='result-message win'>Вы победили!</p>
+						)}
+						{result === 'lose' && (
+							<p className='result-message lose'>Вы проиграли!</p>
+						)}
+						<button className='close-button' onClick={onClose}>
+							Закрыть
+						</button>
+					</div>
 				</div>
-				<div className='modal-buttons'>
-					<button onClick={handlePlay} disabled={!choice}>
-						Играть
-					</button>
-					<button onClick={onClose}>Отказаться</button>
-				</div>
-			</div>
-		</div>
+			)}
+		</>
 	)
 }
 

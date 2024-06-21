@@ -1,4 +1,3 @@
-// components/Home/Home.tsx
 import React, { useEffect, useState } from 'react'
 import { TbCurrencyMonero } from 'react-icons/tb'
 import imgRub from './../../assets/free-icon-ruble.png'
@@ -9,8 +8,7 @@ interface HomeProps {
 	currentSkin: string
 	handleClick: () => void
 	upgradeLevel: number
-	tapCount: number
-	coinFlipTimer: number
+	autoFarmLevel: number
 }
 
 const Home: React.FC<HomeProps> = ({
@@ -18,15 +16,14 @@ const Home: React.FC<HomeProps> = ({
 	currentSkin,
 	handleClick,
 	upgradeLevel,
-	tapCount,
-	coinFlipTimer,
+	autoFarmLevel,
 }) => {
 	const [showPlus, setShowPlus] = useState(false)
-	const [increment, setIncrement] = useState<number>(tapCount)
+	const [increment, setIncrement] = useState<number>(1)
 
 	useEffect(() => {
-		setIncrement(tapCount)
-	}, [tapCount])
+		setIncrement(upgradeLevel)
+	}, [upgradeLevel])
 
 	const handleButtonClick = () => {
 		handleClick()
@@ -36,20 +33,8 @@ const Home: React.FC<HomeProps> = ({
 		}, 1000) // Анимация длится 1 секунду
 	}
 
-	const formatTime = (seconds: number) => {
-		const h = Math.floor(seconds / 3600)
-		const m = Math.floor((seconds % 3600) / 60)
-		const s = Math.floor(seconds % 60)
-		return `${h.toString().padStart(2, '0')}:${m
-			.toString()
-			.padStart(2, '0')}:${s.toString().padStart(2, '0')}`
-	}
-
 	return (
 		<div className='home-container'>
-			<div className='timer'>
-				Время до следующей игры: {formatTime(coinFlipTimer)}
-			</div>
 			<div className='display'>
 				<div className='counter'>
 					<img className='imgRub' src={imgRub} alt='' />
@@ -70,6 +55,9 @@ const Home: React.FC<HomeProps> = ({
 				</button>
 			</div>
 			<div className='upgrade-level'>Уровень прокачки: {upgradeLevel}</div>
+			<div className='auto-farm-level'>
+				Уровень авто-начисления: {autoFarmLevel}
+			</div>
 		</div>
 	)
 }

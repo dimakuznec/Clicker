@@ -12,10 +12,10 @@ const App: React.FC = () => {
 	const [clickIncrement, setClickIncrement] = useState<number>(1)
 	const [upgradeLevel, setUpgradeLevel] = useState<number>(1)
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
-	const [autoFarmLevel, setAutoFarmLevel] = useState<number>(1)
-	const [autoFarmInterval, setAutoFarmInterval] = useState<number>(5000)
+	const [autoFarmLevel, setAutoFarmLevel] = useState<number>(0)
 	const [showCoinFlipModal, setShowCoinFlipModal] = useState<boolean>(false)
 	const [coinFlipTimer, setCoinFlipTimer] = useState<number>(3600) // 1 час = 3600 секунд
+	const [coinFlipResult, setCoinFlipResult] = useState<string | null>(null) // Добавлено для хранения результата игры
 
 	const handleClick = () => {
 		setCurrency(prevCurrency => prevCurrency + clickIncrement)
@@ -40,17 +40,18 @@ const App: React.FC = () => {
 		if (currency >= cost) {
 			setCurrency(prevCurrency => prevCurrency - cost)
 			setAutoFarmLevel(prevLevel => prevLevel + 1)
-			setAutoFarmInterval(prevInterval => prevInterval - increment)
 		}
 	}
 
 	useEffect(() => {
-		const interval = setInterval(() => {
-			setCurrency(prevCurrency => prevCurrency + autoFarmLevel)
-		}, autoFarmInterval)
+		if (autoFarmLevel > 0) {
+			const interval = setInterval(() => {
+				setCurrency(prevCurrency => prevCurrency + 5 * autoFarmLevel)
+			}, 5000) // Начисление каждые 5 секунд
 
-		return () => clearInterval(interval)
-	}, [autoFarmLevel, autoFarmInterval])
+			return () => clearInterval(interval)
+		}
+	}, [autoFarmLevel])
 
 	const toggleMenu = () => {
 		setIsMenuOpen(!isMenuOpen)
@@ -61,10 +62,12 @@ const App: React.FC = () => {
 		if (choice === result) {
 			setCurrency(prevCurrency => prevCurrency + 5)
 			setUpgradeLevel(prevLevel => prevLevel + 1)
+			setCoinFlipResult('win')
 		} else {
 			setUpgradeLevel(prevLevel => Math.max(1, prevLevel - 1))
+			setCoinFlipResult('lose')
 		}
-		setShowCoinFlipModal(false)
+		setShowCoinFlipModal(true)
 		setCoinFlipTimer(3600) // Сбросить таймер на 1 час
 	}
 
@@ -75,7 +78,7 @@ const App: React.FC = () => {
 
 		const coinFlipInterval = setInterval(() => {
 			setShowCoinFlipModal(true)
-		}, 360000) // 1 час = 3600000 миллисекунд
+		}, 3600000) // 1 час = 3600000 миллисекунд
 
 		return () => {
 			clearInterval(timerInterval)
@@ -100,15 +103,9 @@ const App: React.FC = () => {
 						<span></span>
 					</div>
 					<div className={`nav-links ${isMenuOpen ? 'show' : ''}`}>
-						<Link to='/' onClick={toggleMenu}>
-							Главная
-						</Link>
-						<Link to='/shop' onClick={toggleMenu}>
-							Магазин
-						</Link>
-						<Link to='/upgrade' onClick={toggleMenu}>
-							Прокачка
-						</Link>
+						<Link to='/'>Главная</Link>
+						<Link to='/shop'>Магазин</Link>
+						<Link to='/upgrade'>Прокачка</Link>
 					</div>
 				</nav>
 				<Routes>
@@ -120,8 +117,7 @@ const App: React.FC = () => {
 								currentSkin={currentSkin}
 								handleClick={handleClick}
 								upgradeLevel={upgradeLevel}
-								tapCount={clickIncrement}
-								coinFlipTimer={coinFlipTimer}
+								autoFarmLevel={autoFarmLevel}
 							/>
 						}
 					/>
@@ -137,7 +133,6 @@ const App: React.FC = () => {
 								upgradeLevel={upgradeLevel}
 								onUpgrade={handleUpgrade}
 								autoFarmLevel={autoFarmLevel}
-								autoFarmInterval={autoFarmInterval}
 								onAutoFarmUpgrade={handleAutoFarmUpgrade}
 							/>
 						}
@@ -147,6 +142,7 @@ const App: React.FC = () => {
 					show={showCoinFlipModal}
 					onClose={() => setShowCoinFlipModal(false)}
 					onPlay={handleCoinFlip}
+					result={coinFlipResult} // Передача результата в модальное окно
 				/>
 			</div>
 		</Router>
