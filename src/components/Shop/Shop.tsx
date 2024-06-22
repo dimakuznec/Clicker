@@ -23,6 +23,14 @@ const Shop: React.FC<ShopProps> = ({ currency, onBuySkin }) => {
 		},
 	]
 
+	const handleBuySkin = (skin: string, cost: number) => {
+		if (currency >= cost) {
+			onBuySkin(skin, cost)
+		} else {
+			alert('Недостаточно монет для покупки скина!')
+		}
+	}
+
 	return (
 		<div className='shop'>
 			<h2>Магазин скинов</h2>
@@ -31,7 +39,7 @@ const Shop: React.FC<ShopProps> = ({ currency, onBuySkin }) => {
 					<div
 						key={skin.name}
 						className='skin'
-						onClick={() => onBuySkin(skin.skin, skin.cost)}
+						onClick={() => handleBuySkin(skin.skin, skin.cost)}
 						style={{ background: skin.skin }}
 					>
 						{skin.name} - {skin.cost} монет

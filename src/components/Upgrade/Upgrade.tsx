@@ -4,38 +4,46 @@ import './Upgrade.css'
 interface UpgradeProps {
 	currency: number
 	upgradeLevel: number
-	onUpgrade: (cost: number, increment: number) => void
 	autoFarmLevel: number
+	onUpgrade: (cost: number, increment: number) => void
 	onAutoFarmUpgrade: (cost: number, increment: number) => void
 }
 
 const Upgrade: React.FC<UpgradeProps> = ({
 	currency,
 	upgradeLevel,
-	onUpgrade,
 	autoFarmLevel,
+	onUpgrade,
 	onAutoFarmUpgrade,
 }) => {
-	const upgradeCost = 10 * upgradeLevel
-	const autoFarmUpgradeCost = 50 * (autoFarmLevel + 1)
+	const handleUpgrade = () => {
+		const cost = upgradeLevel * 10
+		const increment = 1
+		onUpgrade(cost, increment)
+	}
+
+	const handleAutoFarmUpgrade = () => {
+		const cost = autoFarmLevel * 20
+		const increment = 1
+		onAutoFarmUpgrade(cost, increment)
+	}
 
 	return (
 		<div className='upgrade-container'>
 			<h2>Прокачка</h2>
-			<div className='upgrade-option'>
-				<button
-					onClick={() => onUpgrade(upgradeCost, 1)}
-					disabled={currency < upgradeCost}
-				>
-					Увеличить прирост за клик (Стоимость: {upgradeCost})
+			<div className='upgrade-section'>
+				<p>Уровень: {upgradeLevel}</p>
+				<button onClick={handleUpgrade} disabled={currency < upgradeLevel * 10}>
+					Прокачать за {upgradeLevel * 10} монет
 				</button>
 			</div>
-			<div className='upgrade-option'>
+			<div className='auto-farm-section'>
+				<p>Уровень автофарминга: {autoFarmLevel}</p>
 				<button
-					onClick={() => onAutoFarmUpgrade(autoFarmUpgradeCost, 5)}
-					disabled={currency < autoFarmUpgradeCost}
+					onClick={handleAutoFarmUpgrade}
+					disabled={currency < autoFarmLevel * 20}
 				>
-					Увеличить пассивный доход (Стоимость: {autoFarmUpgradeCost})
+					Прокачать автофарм за {autoFarmLevel * 20} монет
 				</button>
 			</div>
 		</div>

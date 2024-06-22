@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { TbCurrencyMonero } from 'react-icons/tb'
-import imgRub from './../../assets/free-icon-ruble.png'
+import React, { useState } from 'react'
+import Coin from './../../assets/free-icon-ruble.png'
+import M from './../../assets/m.jpg'
 import './Home.css'
 
 interface HomeProps {
@@ -9,6 +9,9 @@ interface HomeProps {
 	handleClick: () => void
 	upgradeLevel: number
 	autoFarmLevel: number
+	onOpenCoinFlipModal: () => void
+	clickIncrement: number
+	clickAnimation: boolean
 }
 
 const Home: React.FC<HomeProps> = ({
@@ -17,46 +20,42 @@ const Home: React.FC<HomeProps> = ({
 	handleClick,
 	upgradeLevel,
 	autoFarmLevel,
+	onOpenCoinFlipModal,
+	clickIncrement,
+	clickAnimation,
 }) => {
-	const [showPlus, setShowPlus] = useState(false)
-	const [increment, setIncrement] = useState<number>(1)
-
-	useEffect(() => {
-		setIncrement(upgradeLevel)
-	}, [upgradeLevel])
-
-	const handleButtonClick = () => {
-		handleClick()
-		setShowPlus(true)
-		setTimeout(() => {
-			setShowPlus(false)
-		}, 1000) // Анимация длится 1 секунду
-	}
+	const [backgroundColor, setBackgroundColor] = useState<string>('#f44336') // Дефолтный цвет красный
 
 	return (
 		<div className='home-container'>
-			<div className='display'>
-				<div className='counter'>
-					<img className='imgRub' src={imgRub} alt='' />
-					<span className='count'>{currency}</span>
+			<div className='counter'>
+				<div className='icon'>
+					<img src={Coin} alt='Coin' className='imgCoins' />
+				</div>
+				<div className='count'>{currency}</div>
+			</div>
+			<div
+				className={`clickable-container ${clickAnimation ? 'show' : ''}`}
+				onClick={handleClick}
+				style={{ background: currentSkin || backgroundColor }} // Используем currentSkin, если выбран, иначе дефолтный backgroundColor
+			>
+				<div className='clickable-button'>
+					<div className='clickable-icon'>
+						<img className='Mimg' src={M} alt='MImg' />
+					</div>
+					{clickAnimation && (
+						<div className={`plus-one ${clickIncrement > 0 ? 'win' : 'lose'}`}>
+							+{clickIncrement}
+						</div>
+					)}
 				</div>
 			</div>
-			<div className='clickable-container'>
-				<button className='clickable-button' onClick={handleButtonClick}>
-					<TbCurrencyMonero
-						className='clickable-icon'
-						style={{
-							background: currentSkin,
-							WebkitBackgroundClip: 'text',
-							WebkitTextFillColor: 'transparent',
-						}}
-					/>
-					{showPlus && <div className='plus-one'>+{increment}</div>}
+			<div className='display'>
+				<div className='upgrade-level'>Уровень прокачки: {upgradeLevel}</div>
+				<div className='upgrade-level'>Уровень автофарма: {autoFarmLevel}</div>
+				<button className='button-game' onClick={onOpenCoinFlipModal}>
+					Игра "Орёл и решка"
 				</button>
-			</div>
-			<div className='upgrade-level'>Уровень прокачки: {upgradeLevel}</div>
-			<div className='auto-farm-level'>
-				Уровень авто-начисления: {autoFarmLevel}
 			</div>
 		</div>
 	)
