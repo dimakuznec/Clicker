@@ -9,15 +9,66 @@ import Shop from './components/Shop/Shop'
 import Upgrade from './components/Upgrade/Upgrade'
 
 const App: React.FC = () => {
-	const [currency, setCurrency] = useState<number>(0)
-	const [currentSkin, setCurrentSkin] = useState<string>('#f44336') // Начальный цвет по умолчанию
-	const [clickIncrement, setClickIncrement] = useState<number>(1)
-	const [upgradeLevel, setUpgradeLevel] = useState<number>(1)
+	const [currency, setCurrency] = useState<number>(() => {
+		const saved = localStorage.getItem('currency')
+		return saved ? Number(saved) : 0
+	})
+	const [currentSkin, setCurrentSkin] = useState<string>(() => {
+		const saved = localStorage.getItem('currentSkin')
+		return saved || 'gray'
+	})
+	const [clickIncrement, setClickIncrement] = useState<number>(() => {
+		const saved = localStorage.getItem('clickIncrement')
+		return saved ? Number(saved) : 1
+	})
+	const [upgradeLevel, setUpgradeLevel] = useState<number>(() => {
+		const saved = localStorage.getItem('upgradeLevel')
+		return saved ? Number(saved) : 1
+	})
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false)
-	const [autoFarmLevel, setAutoFarmLevel] = useState<number>(1)
+	const [autoFarmLevel, setAutoFarmLevel] = useState<number>(() => {
+		const saved = localStorage.getItem('autoFarmLevel')
+		return saved ? Number(saved) : 1
+	})
 	const [showCoinFlipModal, setShowCoinFlipModal] = useState<boolean>(false)
-	const [coinFlipTimer, setCoinFlipTimer] = useState<number>(300) // Таймер для игры "Орёл и решка" (в секундах)
-	const [clickAnimation, setClickAnimation] = useState<boolean>(false) // Состояние для анимации клика
+	const [coinFlipTimer, setCoinFlipTimer] = useState<number>(() => {
+		const saved = localStorage.getItem('coinFlipTimer')
+		return saved ? Number(saved) : 300
+	})
+	const [clickAnimation, setClickAnimation] = useState<boolean>(false)
+	const [ownedSkins, setOwnedSkins] = useState<string[]>(() => {
+		const saved = localStorage.getItem('ownedSkins')
+		return saved ? JSON.parse(saved) : []
+	})
+
+	// Сохранение состояния в localStorage при изменении
+	useEffect(() => {
+		localStorage.setItem('currency', currency.toString())
+	}, [currency])
+
+	useEffect(() => {
+		localStorage.setItem('currentSkin', currentSkin)
+	}, [currentSkin])
+
+	useEffect(() => {
+		localStorage.setItem('clickIncrement', clickIncrement.toString())
+	}, [clickIncrement])
+
+	useEffect(() => {
+		localStorage.setItem('upgradeLevel', upgradeLevel.toString())
+	}, [upgradeLevel])
+
+	useEffect(() => {
+		localStorage.setItem('autoFarmLevel', autoFarmLevel.toString())
+	}, [autoFarmLevel])
+
+	useEffect(() => {
+		localStorage.setItem('ownedSkins', JSON.stringify(ownedSkins))
+	}, [ownedSkins])
+
+	useEffect(() => {
+		localStorage.setItem('coinFlipTimer', coinFlipTimer.toString())
+	}, [coinFlipTimer])
 
 	const handleClick = () => {
 		setCurrency(prevCurrency => prevCurrency + clickIncrement)
@@ -25,9 +76,10 @@ const App: React.FC = () => {
 	}
 
 	const handleBuySkin = (skin: string, cost: number) => {
-		if (currency >= cost) {
+		if (currency >= cost && !ownedSkins.includes(skin)) {
 			setCurrency(prevCurrency => prevCurrency - cost)
-			setCurrentSkin(skin) // Обновление текущего скина
+			setOwnedSkins(prevSkins => [...prevSkins, skin])
+			setCurrentSkin(skin) // Установка купленного скина как текущего
 		}
 	}
 
@@ -140,7 +192,15 @@ const App: React.FC = () => {
 					/>
 					<Route
 						path='/shop'
-						element={<Shop currency={currency} onBuySkin={handleBuySkin} />}
+						element={
+							<Shop
+								currency={currency}
+								onBuySkin={handleBuySkin}
+								ownedSkins={ownedSkins}
+								currentSkin={currentSkin}
+								setCurrentSkin={setCurrentSkin}
+							/>
+						}
 					/>
 					<Route
 						path='/upgrade'

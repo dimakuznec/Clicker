@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Coin from './../../assets/free-icon-ruble.png'
 import M from './../../assets/m.jpg'
 import './Home.css'
@@ -24,8 +24,6 @@ const Home: React.FC<HomeProps> = ({
 	clickIncrement,
 	clickAnimation,
 }) => {
-	const [backgroundColor, setBackgroundColor] = useState<string>('#f44336') // Дефолтный цвет красный
-
 	return (
 		<div className='home-container'>
 			<div className='counter'>
@@ -37,7 +35,7 @@ const Home: React.FC<HomeProps> = ({
 			<div
 				className={`clickable-container ${clickAnimation ? 'show' : ''}`}
 				onClick={handleClick}
-				style={{ background: currentSkin || backgroundColor }} // Используем currentSkin, если выбран, иначе дефолтный backgroundColor
+				style={{ background: currentSkin }}
 			>
 				<div className='clickable-button'>
 					<div className='clickable-icon'>
