@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* App.css */
 .App {
   font-family: Arial, sans-serif;
@@ -54,6 +55,23 @@
   border-radius: 5px;
   font-size: 16px;
   z-index: 1000;
+}
+
+.reset-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000; /* Чтобы кнопка была поверх всего */
+}
+
+.reset-button:hover {
+  background-color: darkred;
 }
 
 @media (max-width: 768px) {
