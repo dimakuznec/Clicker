@@ -122,6 +122,37 @@
   border: none;
 }
 
+.ButtonClick {
+  border-radius: 70px;
+  margin: 20px;
+  width: 260px;
+  height: 260px;
+}
+
+.ButtonClick::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 255, 255, 0.5);
+  z-index: -1;
+  filter: blur(10px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.ButtonClick:hover::before {
+  opacity: 1;
+}
+
+.ButtonClick:hover {
+  color: #00ffff;
+  box-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff, 0 0 60px #ffffff;
+  transition-duration: 0.4s ease;
+}
+
 .clickable-icon {
   border-radius: 50%;
   width: 130px;
@@ -129,7 +160,51 @@
 }
 
 .Mimg {
-  border-radius: 50%;
-  width: 130px;
-  height: 130px;
+  border-radius: 100%;
+  width: 220px;
+  height: 220px;
+}
+
+.reset-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  background-color: darkred;
+}
+
+.Energy {
+  display: flex;
+  border-radius: 10px;
+  background-color: #f44336;
+  color: #fff;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.EnergyImg {
+  width: 30px;
+  height: 30px;
+  color: rgb(93, 0, 255);
+}
+
+.coin-rub {
+  margin-left: 10px;
+}
+
+.text {
+  font-size: 30px;
+  font-weight: 500;
 }/*# sourceMappingURL=Home.css.map */

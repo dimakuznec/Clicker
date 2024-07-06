@@ -4,7 +4,11 @@ import './CoinFlipModal.css'
 interface CoinFlipModalProps {
 	show: boolean
 	onClose: () => void
-	onPlay: (choice: string) => void
+	onPlay: (choice: string) => {
+		isWin: boolean
+		randomCoins: number
+		gameResult: string
+	}
 }
 
 const CoinFlipModal: React.FC<CoinFlipModalProps> = ({
@@ -25,17 +29,14 @@ const CoinFlipModal: React.FC<CoinFlipModalProps> = ({
 	}, [show])
 
 	const handlePlay = (choice: string) => {
-		if (!selectedChoice) {
-			setSelectedChoice(choice)
-			onPlay(choice)
-			const gameResult = Math.random() < 0.5 ? 'Орёл' : 'Решка'
-			setResult(gameResult)
-			setMessage(
-				choice === gameResult
-					? 'Вы выиграли! Уровень повышен и вы получили 50 монет.'
-					: 'Вы проиграли! Уровень понижен.'
-			)
-		}
+		const { isWin, gameResult } = onPlay(choice)
+		setSelectedChoice(choice)
+		setResult(gameResult)
+		setMessage(
+			isWin
+				? `Вы выиграли! Уровень прокачки повышен и вы получили монеты.`
+				: `Вы проиграли! Уровень прокачки понижен. Уровень автофарминга понижен.`
+		)
 	}
 
 	const handleClose = () => {
@@ -65,7 +66,7 @@ const CoinFlipModal: React.FC<CoinFlipModalProps> = ({
 				</div>
 				{selectedChoice && (
 					<div className='result'>
-						<p className={selectedChoice === result ? 'win' : 'lose'}>
+						<p className={result === selectedChoice ? 'win' : 'lose'}>
 							{message}
 						</p>
 					</div>

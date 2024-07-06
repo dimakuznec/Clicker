@@ -31,8 +31,8 @@
 
 .close-button {
 	position: absolute;
-	top: 10px;
-	right: 10px;
+	top: -23px;
+	right: -28px;
 	background-color: transparent;
 	border: none;
 	font-size: 20px;
@@ -52,13 +52,14 @@
 	margin-top: 20px;
 }
 
-.coin-flip-modal button {
+.coin-flip-modal .close-button {
 	background-color: #f0f0f0;
 	border: none;
 	padding: 10px 20px;
 	margin: 5px;
 	cursor: pointer;
-	border-radius: 4px;
+
+	border-radius: 30px;
 }
 
 .coin-flip-modal button:disabled {

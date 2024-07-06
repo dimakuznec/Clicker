@@ -30,15 +30,14 @@ const Upgrade: React.FC<UpgradeProps> = ({
 
 	return (
 		<div className='upgrade-container'>
-			<h2>Прокачка</h2>
 			<div className='upgrade-section'>
-				<p>Уровень: {upgradeLevel}</p>
+				<p className='text'>Уровень прокачки: {upgradeLevel}</p>
 				<button onClick={handleUpgrade} disabled={currency < upgradeLevel * 10}>
 					Прокачать за {upgradeLevel * 10} монет
 				</button>
 			</div>
 			<div className='auto-farm-section'>
-				<p>Уровень автофарминга: {autoFarmLevel}</p>
+				<p className='text'>Уровень автофарминга: {autoFarmLevel}</p>
 				<button
 					onClick={handleAutoFarmUpgrade}
 					disabled={currency < autoFarmLevel * 20}
