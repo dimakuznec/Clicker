@@ -129,30 +129,40 @@
   height: 260px;
 }
 
-.ButtonClick::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 255, 255, 0.5);
-  z-index: -1;
-  filter: blur(10px);
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.ButtonClick:hover::before {
-  opacity: 1;
+.ButtonClick {
+  transition: box-shadow 0.5s;
 }
 
 .ButtonClick:hover {
-  color: #00ffff;
-  box-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff, 0 0 60px #ffffff;
-  transition-duration: 0.4s ease;
+  animation: rainbowGlow 10s linear infinite;
 }
 
+@keyframes rainbowGlow {
+  0% {
+    box-shadow: 0 0 20px rgb(255, 105, 135), 0 0 40px rgb(255, 105, 135), 0 0 60px rgb(255, 105, 135);
+  }
+  14% {
+    box-shadow: 0 0 20px rgb(255, 165, 0), 0 0 40px rgb(255, 165, 0), 0 0 60px rgb(255, 165, 0);
+  }
+  28% {
+    box-shadow: 0 0 20px rgb(255, 255, 120), 0 0 40px rgb(255, 255, 120), 0 0 60px rgb(255, 255, 120);
+  }
+  42% {
+    box-shadow: 0 0 20px rgb(144, 238, 144), 0 0 40px rgb(144, 238, 144), 0 0 60px rgb(144, 238, 144);
+  }
+  57% {
+    box-shadow: 0 0 20px rgb(135, 206, 250), 0 0 40px rgb(135, 206, 250), 0 0 60px rgb(135, 206, 250);
+  }
+  71% {
+    box-shadow: 0 0 20px rgb(218, 112, 214), 0 0 40px rgb(218, 112, 214), 0 0 60px rgb(218, 112, 214);
+  }
+  85% {
+    box-shadow: 0 0 20px rgb(221, 160, 221), 0 0 40px rgb(221, 160, 221), 0 0 60px rgb(221, 160, 221);
+  }
+  100% {
+    box-shadow: 0 0 20px rgb(255, 105, 135), 0 0 40px rgb(255, 105, 135), 0 0 60px rgb(255, 105, 135);
+  }
+}
 .clickable-icon {
   border-radius: 50%;
   width: 130px;
@@ -186,7 +196,7 @@
   color: #fff;
   padding: 10px 20px;
   margin-bottom: 15px;
-  font-size: 16px;
+  font-size: 20px;
   border: none;
   cursor: pointer;
   position: relative;
@@ -198,6 +208,8 @@
   width: 30px;
   height: 30px;
   color: rgb(93, 0, 255);
+  margin-right: 5px;
+  margin-top: -3px;
 }
 
 .coin-rub {

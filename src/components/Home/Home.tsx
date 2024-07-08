@@ -34,7 +34,7 @@ const Home: React.FC<HomeProps> = ({
 		{ id: number; clicks: number; position: { x: number; y: number } }[]
 	>([])
 	const maxEnergy = 100
-	const energyRegenRate = 1 // Energy regen per second
+	const energyRegenRate = 3 // Energy regen per second
 	const clickEnergyCost = 10
 	const baseClickValue = 1
 
