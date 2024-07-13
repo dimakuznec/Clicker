@@ -1,4 +1,5 @@
 import React from 'react'
+import Cet from './../../assets/cet.png'
 import './Shop.css'
 
 interface ShopProps {
@@ -103,6 +104,7 @@ const Shop: React.FC<ShopProps> = ({
 					</li>
 				))}
 			</ul>
+			<img src={Cet} alt='' />
 			<div className='currency-display'>Ваш баланс: {currency} монет</div>
 		</div>
 	)
