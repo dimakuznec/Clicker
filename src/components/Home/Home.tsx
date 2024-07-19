@@ -12,7 +12,6 @@ import Music1 from './../../Music/battlefield-elegy-201530.mp3'
 import Music2 from './../../Music/danny-evo-dark-skies.mp3'
 import Music3 from './../../Music/flow.mp3'
 import Coin from './../../assets/free-icon-ruble.png'
-import M from './../../assets/m2.png'
 import './Home.css'
 
 interface HomeProps {
@@ -24,6 +23,7 @@ interface HomeProps {
 	onOpenCoinFlipModal: () => void
 	hasPlayedCoinFlip: boolean
 	onNotification: (message: string) => void
+	currentImage: string
 }
 
 const Home: React.FC<HomeProps> = ({
@@ -35,6 +35,7 @@ const Home: React.FC<HomeProps> = ({
 	onOpenCoinFlipModal,
 	hasPlayedCoinFlip,
 	onNotification,
+	currentImage,
 }) => {
 	const [energy, setEnergy] = useState<number>(() => {
 		const savedEnergy = localStorage.getItem('energy')
@@ -193,7 +194,7 @@ const Home: React.FC<HomeProps> = ({
 				style={{ background: currentSkin }}
 			>
 				<div>
-					<img className='Mimg' src={M} alt='' />
+					<img className='Mimg' src={currentImage} alt='' />
 				</div>
 			</button>
 			<div className='Energy'>

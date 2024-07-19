@@ -3,8 +3,10 @@ import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify' // Импорт toast из react-toastify
 import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
+import M from './assets/m2.png' // Импортируем изображение с буквой "M"
 import CoinFlipModal from './components/CoinFlipModal/CoinFlipModal'
 import Home from './components/Home/Home'
+import ImageShop from './components/ImageShop/ImageShop' // Импортируем компонент ImageShop
 import Shop from './components/Shop/Shop'
 import Upgrade from './components/Upgrade/Upgrade'
 
@@ -155,12 +157,42 @@ const App: React.FC = () => {
 		setClickIncrement(1)
 		setShowCoinFlipModal(false)
 		setHasPlayedCoinFlip(false)
-		toast.info('Все данные сброшены!') // Уведомление о сбросе
+
+		setCurrentImage(M) // Устанавливаем изображение с буквой "M" после сброса
+		localStorage.setItem('currentImage', M) // Сохраняем изображение с буквой "M" в localStorage после сброса
+
+		setOwnedImages([M]) // Сбрасываем список купленных изображений до начального состояния
+		localStorage.setItem('ownedImages', JSON.stringify([M])) // Сохраняем начальное состояние в localStorage
 	}
 
 	const toggleMenu = () => {
 		setIsMenuOpen(!isMenuOpen)
 	}
+
+	const handleBuyImage = (image: string, cost: number) => {
+		if (currency >= cost && !ownedImages.includes(image)) {
+			setCurrency(prevCurrency => prevCurrency - cost)
+			setOwnedImages(prevImages => [...prevImages, image])
+		}
+	}
+
+	const [currentImage, setCurrentImage] = useState<string>(() => {
+		const savedImage = localStorage.getItem('currentImage')
+		return savedImage ? savedImage : M // Используем изображение с буквой "M" как значение по умолчанию
+	})
+
+	const [ownedImages, setOwnedImages] = useState<string[]>(() => {
+		const savedImages = localStorage.getItem('ownedImages')
+		return savedImages ? JSON.parse(savedImages) : [M] // Используем изображение с буквой "M" как начальное значение
+	})
+
+	useEffect(() => {
+		localStorage.setItem('currentImage', currentImage) // Сохраняем текущее изображение в localStorage
+	}, [currentImage])
+
+	useEffect(() => {
+		localStorage.setItem('ownedImages', JSON.stringify(ownedImages)) // Сохраняем список купленных изображений в localStorage
+	}, [ownedImages])
 
 	return (
 		<Router>
@@ -180,6 +212,9 @@ const App: React.FC = () => {
 						</Link>
 						<Link className='link' to='/shop' onClick={toggleMenu}>
 							Магазин
+						</Link>
+						<Link className='link' to='/ImageShop' onClick={toggleMenu}>
+							магазин герои
 						</Link>
 						<Link className='link' to='/upgrade' onClick={toggleMenu}>
 							Прокачка
@@ -207,6 +242,7 @@ const App: React.FC = () => {
 									onOpenCoinFlipModal={handleOpenCoinFlipModal}
 									hasPlayedCoinFlip={hasPlayedCoinFlip}
 									onNotification={toast.info}
+									currentImage={currentImage}
 								/>
 							}
 						/>
@@ -234,6 +270,18 @@ const App: React.FC = () => {
 									autoFarmLevel={autoFarmLevel}
 									onUpgrade={handleUpgrade}
 									onAutoFarmUpgrade={handleAutoFarmUpgrade}
+								/>
+							}
+						/>
+						<Route
+							path='/imageshop'
+							element={
+								<ImageShop
+									currency={currency}
+									onBuyImage={handleBuyImage}
+									ownedImages={ownedImages}
+									currentImage={currentImage}
+									setCurrentImage={setCurrentImage}
 								/>
 							}
 						/>
